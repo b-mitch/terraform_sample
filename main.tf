@@ -113,6 +113,46 @@ resource "aws_route53_record" "woutfh_dns" {
   records = [aws_instance.woutfh_prod_instance.public_ip]
 }
 
+# IAM role for CodeBuild to assume during the build and deploy stages
+resource "aws_iam_role" "codebuild_role" {
+  name = "codebuild-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
+        Principal = {
+          Service = "codebuild.amazonaws.com",
+        },
+      },
+    ],
+  })
+}
+
+# CodeBuild project for the build stage (dev)
+resource "aws_codebuild_project" "build_dev_project" {
+  name          = "build-dev-project"
+  service_role  = aws_iam_role.codebuild_role.arn
+  environment   = "linux_container"
+  source {
+    type = "NO_SOURCE"
+  }
+  buildspec = file("buildspec_dev.yml")  # Create a buildspec file for the dev environment
+}
+
+# CodeBuild project for the deploy stage (prod)
+resource "aws_codebuild_project" "deploy_prod_project" {
+  name          = "deploy-prod-project"
+  service_role  = aws_iam_role.codebuild_role.arn
+  environment   = "linux_container"
+  source {
+    type = "NO_SOURCE"
+  }
+  buildspec = file("buildspec_prod.yml")  # Create a buildspec file for the prod environment
+}
+
 # CodePipline Setup
 resource "aws_codepipeline" "woutfh_pipeline" {
   name     = "woutfh-pipeline"
@@ -121,10 +161,6 @@ resource "aws_codepipeline" "woutfh_pipeline" {
   artifact_store {
     location = "your_bucket_name"
     type     = "S3"
-    encryption_key {
-      id   = "your_key_id"
-      type = "KMS"
-    }
   }
 
   stage {
@@ -139,10 +175,10 @@ resource "aws_codepipeline" "woutfh_pipeline" {
       output_artifacts = ["SourceArtifact"]
 
       configuration = {
-        Owner      = "your_github_username"
-        Repo       = "your_repo_name"
-        Branch     = "your_branch_name"
-        OAuthToken = "your_oauth_token"
+        Owner      = var.secrets["github_username"]
+        Repo       = var.secrets["github_repo"]
+        Branch     = "main"
+        SecretName = var.secrets["github_token"]
       }
     }
   }
@@ -159,7 +195,7 @@ resource "aws_codepipeline" "woutfh_pipeline" {
       version         = "1"
 
       configuration = {
-        ProjectName = "your_codebuild_project_name"
+        ProjectName = "woutfh-build-project"
       }
     }
   }
