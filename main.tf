@@ -62,6 +62,11 @@ resource "aws_instance" "woutfh_dev_instance" {
   }
 }
 
+variable "secrets" {
+  type        = map
+  description = "Map of secret values"
+}
+
 # Create RDS Instances
 resource "aws_db_instance" "woutfh_prod_db" {
   engine            = "postgres"
@@ -72,7 +77,7 @@ resource "aws_db_instance" "woutfh_prod_db" {
   password          = var.secrets["prod_db_password"]
   engine_version    = "15.4-R3""
 
-  subnet_ids = [aws_subnet.public_subnet.id]  # Specify the production subnet
+  subnet_ids = [aws_subnet.woutfh_public_subnet.id]  # Specify the production subnet
 
   tags = {
     Name = "WoutFHProductionRDSInstance"
@@ -88,7 +93,7 @@ resource "aws_db_instance" "woutfh_dev_db" {
   password          = var.secrets["dev_db_password"]
   engine_version    = "15.4-R3""
 
-  subnet_ids = [aws_subnet.private_subnet.id]  # Specify the dev subnet
+  subnet_ids = [aws_subnet.woutfh_private_subnet.id]  # Specify the dev subnet
 
   tags = {
     Name = "WoutFHDevRDSInstance"
