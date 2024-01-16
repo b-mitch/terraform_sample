@@ -114,8 +114,8 @@ resource "aws_route53_record" "woutfh_dns" {
 }
 
 # IAM role for CodeBuild to assume during the build and deploy stages
-resource "aws_iam_role" "codebuild_role" {
-  name = "codebuild-role"
+resource "aws_iam_role" "woutfh_codebuild_role" {
+  name = "woutfh-codebuild-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -134,7 +134,7 @@ resource "aws_iam_role" "codebuild_role" {
 # CodeBuild project for the build stage (dev)
 resource "aws_codebuild_project" "build_dev_project" {
   name          = "build-dev-project"
-  service_role  = aws_iam_role.codebuild_role.arn
+  service_role  = aws_iam_role.woutfh_codebuild_role.arn
   environment   = "linux_container"
   source {
     type = "NO_SOURCE"
@@ -145,7 +145,7 @@ resource "aws_codebuild_project" "build_dev_project" {
 # CodeBuild project for the deploy stage (prod)
 resource "aws_codebuild_project" "deploy_prod_project" {
   name          = "deploy-prod-project"
-  service_role  = aws_iam_role.codebuild_role.arn
+  service_role  = aws_iam_role.woutfh_codebuild_role.arn
   environment   = "linux_container"
   source {
     type = "NO_SOURCE"
