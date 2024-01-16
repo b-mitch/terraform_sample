@@ -100,13 +100,17 @@ resource "aws_db_instance" "woutfh_dev_db" {
   }
 }
 
+resource aws_route53_zone "woutfh_zone" {
+  name = "workoutfh.com"
+}
+
 # Create Route 53 DNS Record
-resource "aws_route53_record" "app_dns" {
-  name    = "your_domain_name"
+resource "aws_route53_record" "woutfh_dns" {
+  name    = "www"
   type    = "A"
-  zone_id = "your_zone_id"
+  zone_id = "aws_route53_zone.woutfh_zone.zone_id"
   ttl     = "300"
-  records = [aws_instance.prod_instance.public_ip]
+  records = [aws_instance.woutfh_prod_instance.public_ip]
 }
 
 # CodePipline Setup
