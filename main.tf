@@ -70,12 +70,12 @@ resource "aws_db_instance" "woutfh_prod_db" {
   allocated_storage = 20
   username          = var.secrets["prod_db_username"]
   password          = var.secrets["prod_db_password"]
-  engine_version    = "your_postgres_version"
+  engine_version    = "15.4-R3""
 
   subnet_ids = [aws_subnet.public_subnet.id]  # Specify the production subnet
 
   tags = {
-    Name = "ProductionRDSInstance"
+    Name = "WoutFHProductionRDSInstance"
   }
 }
 
@@ -86,12 +86,12 @@ resource "aws_db_instance" "woutfh_dev_db" {
   allocated_storage = 20
   username          = var.secrets["dev_db_username"]
   password          = var.secrets["dev_db_password"]
-  engine_version    = "your_postgres_version"
+  engine_version    = "15.4-R3""
 
   subnet_ids = [aws_subnet.private_subnet.id]  # Specify the dev subnet
 
   tags = {
-    Name = "DevRDSInstance"
+    Name = "WoutFHDevRDSInstance"
   }
 }
 
