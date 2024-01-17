@@ -68,11 +68,37 @@ resource "aws_subnet" "private_app_subnet" {
   }
 }
 
-# create private data subnet az1
+# create private production data subnet az1
 # terraform aws create subnet
-resource "aws_subnet" "private_dev_data_subnet" {
+resource "aws_subnet" "private_prod_data_subnet_az1" {
   vpc_id                   = aws_vpc.vpc.id
-  cidr_block               = var.private_dev_data_subnet_cidr
+  cidr_block               = var.private_prod_data_subnet_cidr_1
+  availability_zone        = "us-east-1a"
+  map_public_ip_on_launch  = false
+
+  tags      = {
+    Name    = "private-prod-data-subnet-az1"
+  }
+}
+
+# create private production data subnet az2
+# terraform aws create subnet
+resource "aws_subnet" "private_prod_data_subnet_az2" {
+  vpc_id                   = aws_vpc.vpc.id
+  cidr_block               = var.private_prod_data_subnet_cidr_2
+  availability_zone        = "us-east-1b"
+  map_public_ip_on_launch  = false
+
+  tags      = {
+    Name    = "private-prod-data-subnet-az2"
+  }
+}
+
+# create private development data subnet az1
+# terraform aws create subnet
+resource "aws_subnet" "private_dev_data_subnet_az1" {
+  vpc_id                   = aws_vpc.vpc.id
+  cidr_block               = var.private_dev_data_subnet_cidr_1
   availability_zone        = "us-east-1a"
   map_public_ip_on_launch  = false
 
@@ -81,15 +107,15 @@ resource "aws_subnet" "private_dev_data_subnet" {
   }
 }
 
-# create private data subnet az2
+# create private development data subnet az2
 # terraform aws create subnet
-resource "aws_subnet" "private_prod_data_subnet" {
+resource "aws_subnet" "private_dev_data_subnet_az2" {
   vpc_id                   = aws_vpc.vpc.id
-  cidr_block               = var.private_prod_data_subnet_cidr
-  availability_zone        = "us-east-1a"
+  cidr_block               = var.private_dev_data_subnet_cidr_2
+  availability_zone        = "us-east-1b"
   map_public_ip_on_launch  = false
 
   tags      = {
-    Name    = "private-prod-data-subnet-az1"
+    Name    = "private-dev-data-subnet-az2"
   }
 }
