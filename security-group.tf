@@ -1,30 +1,3 @@
-# create security group for the bastion host aka jump box
-# terraform aws create security group
-# resource "aws_security_group" "ssh_security_group" {
-#     name        = "ssh-security-group"
-#     description = "enable ssh access on port 22"
-#     vpc_id      = aws_vpc.vpc.id
-
-#     ingress {
-#         description = "SSH from VPC"
-#         from_port   = 22
-#         to_port     = 22
-#         protocol    = "tcp"
-#         cidr_blocks = [var.ssh_location]
-#     }
-
-#     egress {
-#         from_port   = 0
-#         to_port     = 0
-#         protocol    = -1
-#         cidr_blocks = ["0.0.0.0/0"]
-#     }
-
-#     tags = {
-#         Name = "ssh-security-group"
-#     }
-# }
-
 # create security group for the production web server
 # terraform aws create security group
 resource "aws_security_group" "prod_webserver_security_group" {
@@ -56,14 +29,6 @@ resource "aws_security_group" "prod_webserver_security_group" {
         cidr_blocks = [var.ssh_location]
     }
 
-    # ingress {
-    #     description = "ssh access"
-    #     from_port   = 22
-    #     to_port     = 22
-    #     protocol    = "tcp"
-    #     security_groups = [aws_security_group.ssh_security_group.id]
-    # }
-
     egress {
         from_port   = 0
         to_port     = 0
@@ -90,14 +55,6 @@ resource "aws_security_group" "dev_webserver_security_group" {
         protocol    = "tcp"
         cidr_blocks = [var.ssh_location]
     }
-
-    # ingress {
-    #     description = "ssh access"
-    #     from_port   = 22
-    #     to_port     = 22
-    #     protocol    = "tcp"
-    #     security_groups = [aws_security_group.ssh_security_group.id]
-    # }
 
     egress {
         from_port   = 0
@@ -134,14 +91,6 @@ resource "aws_security_group" "prod_database_security_group" {
         cidr_blocks = [var.ssh_location]
     }
 
-    # ingress {
-    #     description = "ssh access"
-    #     from_port   = 22
-    #     to_port     = 22
-    #     protocol    = "tcp"
-    #     security_groups = [aws_security_group.ssh_security_group.id]
-    # }
-
     egress {
         from_port   = 0
         to_port     = 0
@@ -176,14 +125,6 @@ resource "aws_security_group" "dev_database_security_group" {
         protocol    = "tcp"
         cidr_blocks = [var.ssh_location]
     }
-
-    # ingress {
-    #     description = "ssh access"
-    #     from_port   = 22
-    #     to_port     = 22
-    #     protocol    = "tcp"
-    #     security_groups = [aws_security_group.ssh_security_group.id]
-    # }
 
     egress {
         from_port   = 0
