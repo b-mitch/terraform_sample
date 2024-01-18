@@ -18,21 +18,8 @@ resource "aws_instance" "prod_instance" {
     subnet_id                   = aws_subnet.public_prod_subnet.id
     associate_public_ip_address = true
     key_name                    = aws_key_pair.key_pair.key_name
-
-    # provisioner "remote-exec" {
-    #     inline = [
-    #     "sudo apt-get update",
-    #     "sudo apt-get install -y ansible",
-    #     ]
-    # }
-
-    # connection {
-    #     type        = "ssh"
-    #     user        = "ec2-user"
-    #     private_key = file(var.private_key_path)
-    #     host        = self.public_ip
-    # }
-
+    user_data                   = file("instance-setup.sh")
+    
     tags = {
         Name = "prod-instance"
     }
@@ -52,20 +39,7 @@ resource "aws_instance" "dev_instance" {
     subnet_id                   = aws_subnet.public_dev_subnet.id
     associate_public_ip_address = true
     key_name                    = aws_key_pair.key_pair.key_name
-
-    # provisioner "remote-exec" {
-    #     inline = [
-    #     "sudo apt-get update",
-    #     "sudo apt-get install -y ansible",
-    #     ]
-    # }
-
-    # connection {
-    #     type        = "ssh"
-    #     user        = "ec2-user"
-    #     private_key = file(var.private_key_path)
-    #     host        = self.public_ip
-    # }
+    user_data                   = file("instance-setup.sh")
 
     tags = {
         Name = "dev-instance"
