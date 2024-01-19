@@ -56,6 +56,14 @@ resource "aws_security_group" "dev_webserver_security_group" {
         cidr_blocks = [var.ssh_location]
     }
 
+    ingress {
+        description = "postgres access"
+        from_port   = 5432
+        to_port     = 5432
+        protocol    = "tcp"
+        security_groups = [aws_security_group.prod_database_security_group.id]
+    }
+
     egress {
         from_port   = 0
         to_port     = 0
@@ -83,14 +91,6 @@ resource "aws_security_group" "prod_database_security_group" {
         security_groups = [aws_security_group.prod_webserver_security_group.id]
     }
 
-    ingress {
-        description = "SSH access"
-        from_port   = 22
-        to_port     = 22
-        protocol    = "tcp"
-        cidr_blocks = [var.ssh_location]
-    }
-
     egress {
         from_port   = 0
         to_port     = 0
@@ -116,14 +116,6 @@ resource "aws_security_group" "dev_database_security_group" {
         to_port     = 5432
         protocol    = "tcp"
         security_groups = [aws_security_group.dev_webserver_security_group.id]
-    }
-
-    ingress {
-        description = "SSH access"
-        from_port   = 22
-        to_port     = 22
-        protocol    = "tcp"
-        cidr_blocks = [var.ssh_location]
     }
 
     egress {
