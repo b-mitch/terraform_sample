@@ -4,3 +4,5 @@
 
 sudo yum install -y python3-pip
 sudo python3 -m pip install ansible-core
+sudo yum -y install git
+
