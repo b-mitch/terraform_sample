@@ -48,6 +48,7 @@ resource "aws_db_instance" "dev_db" {
     engine_version    = "15.4"
     db_subnet_group_name = aws_db_subnet_group.dev_data_subnet_group.name
     vpc_security_group_ids = [aws_security_group.dev_database_security_group.id]
+    publicly_accessible = true
 
     tags = {
         Name = "dev-db-instance"
