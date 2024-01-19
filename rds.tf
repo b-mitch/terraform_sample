@@ -25,11 +25,13 @@ resource "aws_db_instance" "prod_db" {
     instance_class    = "db.t3.micro"
     identifier        = "prod-db-instance"
     allocated_storage = 20
+    db_name           = "prod_db"
     username          = var.prod_db_username
     password          = var.prod_db_password
     engine_version    = "15.4"
     db_subnet_group_name = aws_db_subnet_group.prod_data_subnet_group.name
     vpc_security_group_ids = [aws_security_group.prod_database_security_group.id]
+    skip_final_snapshot = true
 
     tags = {
         Name = "prod-db-instance"
@@ -43,11 +45,13 @@ resource "aws_db_instance" "dev_db" {
     instance_class    = "db.t3.micro"
     identifier        = "dev-db-instance"
     allocated_storage = 20
+    db_name           = "dev_db"
     username          = var.dev_db_username
     password          = var.dev_db_password
     engine_version    = "15.4"
     db_subnet_group_name = aws_db_subnet_group.dev_data_subnet_group.name
     vpc_security_group_ids = [aws_security_group.dev_database_security_group.id]
+    skip_final_snapshot = true
 
     tags = {
         Name = "dev-db-instance"
