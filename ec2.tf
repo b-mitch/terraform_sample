@@ -17,6 +17,7 @@ resource "aws_instance" "prod_instance" {
     subnet_id                   = aws_subnet.public_prod_subnet.id
     associate_public_ip_address = true
     key_name                    = aws_key_pair.key_pair.key_name
+    user_data                  = file("docker-setup.sh")
     
     tags = {
         Name        = "prod-instance"
@@ -38,6 +39,7 @@ resource "aws_instance" "dev_instance" {
     subnet_id                   = aws_subnet.public_dev_subnet.id
     associate_public_ip_address = true
     key_name                    = aws_key_pair.key_pair.key_name
+    user_data                  = file("docker-setup.sh")
 
     tags = {
         Name        = "dev-instance"
