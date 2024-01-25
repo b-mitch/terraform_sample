@@ -72,14 +72,6 @@ resource "aws_security_group" "dev_webserver_security_group" {
         cidr_blocks = [var.ssh_location]
     }
 
-    ingress {
-        description = "postgres access"
-        from_port   = 5432
-        to_port     = 5432
-        protocol    = "tcp"
-        security_groups = [aws_security_group.prod_database_security_group.id]
-    }
-
     egress {
         from_port   = 0
         to_port     = 0
@@ -144,4 +136,30 @@ resource "aws_security_group" "dev_database_security_group" {
     tags = {
         Name = "dev-database-security-group"
     }
+}
+
+# Add ingress rule to production webserver security group allowing traffic from RDS security group
+# Terraform aws create security group rule
+resource "aws_security_group_rule" "prod_webserver_ingress_rule" {
+  security_group_id = aws_security_group.prod_webserver_security_group.id
+
+  type        = "ingress"
+  description = "allow traffic from production RDS security group"
+  from_port   = 5432 
+  to_port     = 5432
+  protocol    = "tcp"
+  source_security_group_id = aws_security_group.prod_database_security_group.id
+}
+
+# Add ingress rule to development webserver security group allowing traffic from RDS security group
+# Terraform aws create security group rule
+resource "aws_security_group_rule" "dev_webserver_ingress_rule" {
+  security_group_id = aws_security_group.dev_webserver_security_group.id
+
+  type        = "ingress"
+  description = "allow traffic from development RDS security group"
+  from_port   = 5432 
+  to_port     = 5432
+  protocol    = "tcp"
+  source_security_group_id = aws_security_group.dev_database_security_group.id
 }
