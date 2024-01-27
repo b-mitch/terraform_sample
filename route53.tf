@@ -4,7 +4,7 @@ resource "aws_route53_record" "woutfh_domain" {
   name    = "woutfh.com"
   type    = "A"
   ttl     = "300"
-  records = ["44.193.200.207"]  
+  records = ["44.193.200.207"]  # The public IP of the EC2 instance
 }
 
 # Create an A record for the www subdomain
@@ -13,5 +13,5 @@ resource "aws_route53_record" "www_subdomain" {
   name    = "www.woutfh.com"
   type    = "A"
   ttl     = "300"
-  records = ["44.193.200.207"] 
+  records = ["44.193.200.207"] # The public IP of the EC2 instance
 }
