@@ -174,7 +174,7 @@ resource "aws_security_group" "prod_database_security_group" {
         from_port   = 5432
         to_port     = 5432
         protocol    = "tcp"
-        security_groups = [aws_security_group.prod_webserver_security_group_az1.id, aws_security_group.prod_webserver_security_group_az2]
+        security_groups = [aws_security_group.prod_webserver_security_group_az1.id, aws_security_group.prod_webserver_security_group_az2.id]
     }
 
     egress {
@@ -219,7 +219,7 @@ resource "aws_security_group" "dev_database_security_group" {
 # Add ingress rule to production webserver az1 security group allowing traffic from RDS security group
 # Terraform aws create security group rule
 resource "aws_security_group_rule" "prod_webserver_az1_ingress_from_db" {
-  security_group_id = aws_security_group.prod_webserver_security_group.id
+  security_group_id = aws_security_group.prod_webserver_security_group_az1.id
 
   type        = "ingress"
   description = "allow traffic from production RDS security group"

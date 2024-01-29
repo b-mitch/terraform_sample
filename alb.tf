@@ -25,7 +25,7 @@ resource "aws_lb_target_group" "target_group" {
     health_check {
         healthy_threshold   = 5
         interval            = 30
-        matcher             = "200, 301, 302"
+        matcher             = "200,301,302"
         path = "/"
         port = "traffic-port"
         protocol            = "HTTP"
@@ -49,4 +49,20 @@ resource "aws_lb_listener" "http_listener" {
         target_group_arn = aws_lb_target_group.target_group.arn
         type             = "forward"
     }
+}
+
+# create target group attachment for the production ec2 instance in az1
+# terraform aws create target group attachment
+resource "aws_lb_target_group_attachment" "target_group_attachment_az1" {
+    target_group_arn = aws_lb_target_group.target_group.arn
+    target_id        = aws_instance.prod_instance_az1.id
+    port             = 80
+}
+
+# create target group attachment for the production ec2 instance in az2
+# terraform aws create target group attachment
+resource "aws_lb_target_group_attachment" "target_group_attachment_az2" {
+    target_group_arn = aws_lb_target_group.target_group.arn
+    target_id        = aws_instance.prod_instance_az2.id
+    port             = 80
 }
