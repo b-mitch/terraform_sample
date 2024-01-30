@@ -21,7 +21,7 @@ resource "aws_instance" "prod_instance_az1" {
     
     tags = {
         Name        = "prod-instance-az1"
-        Environment = "production"
+        Environment = "blue production"
         Project     = "woutfh"
     }
 }
@@ -43,7 +43,7 @@ resource "aws_instance" "prod_instance_az2" {
 
     tags = {
         Name        = "prod-instance-az2"
-        Environment = "production"
+        Environment = "green production"
         Project     = "woutfh"
     }
 }
