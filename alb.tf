@@ -70,8 +70,23 @@ resource "aws_lb_listener" "http_listener" {
     protocol          = "HTTP"
 
     default_action {
-        target_group_arn = aws_lb_target_group.blue.arn
-        type             = "forward"
+      type             = "forward"
+      forward {
+        target_group {
+          arn    = aws_lb_target_group.blue.arn
+          weight = 100
+        }
+
+        target_group {
+          arn    = aws_lb_target_group.green.arn
+          weight = 0
+        }
+
+        stickiness {
+          enabled  = false
+          duration = 1
+        }
+      }
     }
 }
 
@@ -89,40 +104,4 @@ resource "aws_lb_target_group_attachment" "green_group_attachment_az2" {
     target_group_arn = aws_lb_target_group.green.arn
     target_id        = aws_instance.prod_instance_az2.id
     port             = 80
-}
-
-# define listener rules for blue group with heavier weight
-# terraform aws create listener rules
-resource "aws_lb_listener_rule" "rule1" {
-  listener_arn = aws_lb_listener.http_listener.arn
-  priority     = 1
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.blue.arn
-  }
-
-  condition {
-    path_pattern {
-      values = ["/*"]
-    }
-  }
-}
-
-# define listener rules for green group with lighter weight
-# terraform aws create listener rules
-resource "aws_lb_listener_rule" "rule2" {
-  listener_arn = aws_lb_listener.http_listener.arn
-  priority     = 10
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.green.arn
-  }
-
-  condition {
-    path_pattern {
-      values = ["/*"]
-    }
-  }
 }
