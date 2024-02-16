@@ -35,8 +35,8 @@ variable "vpc_cidr" {
     type        = string 
 }
 
-variable "public_subnet_cidr" {
-    default     = "10.0.0.0/24"
+variable "public_prod_subnet_cidr_az1" {
+    default     = "10.0.1.0/24"
     description = "public subnet cidr block"
     type        = string 
 }
