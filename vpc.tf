@@ -20,7 +20,7 @@ resource "aws_internet_gateway" "internet_gateway" {
   }
 }
 
-# create public subnet in az1
+# create public production subnet az1
 # terraform aws create subnet
 resource "aws_subnet" "public_prod_subnet_az1" {
   vpc_id                  = aws_vpc.vpc.id
@@ -30,6 +30,19 @@ resource "aws_subnet" "public_prod_subnet_az1" {
 
   tags      = {
     Name    = "public-prod-subnet-az1"
+  }
+}
+
+# create public production subnet az2
+# terraform aws create subnet
+resource "aws_subnet" "public_prod_subnet_az2" {
+  vpc_id                  = aws_vpc.vpc.id
+  cidr_block              = var.public_prod_subnet_cidr_az2
+  availability_zone       = "us-east-1b"
+  map_public_ip_on_launch = true
+
+  tags      = {
+    Name    = "public-prod-subnet-az2"
   }
 }
 
